@@ -1,6 +1,5 @@
 import json
-import urllib.request
-import urllib.parse
+import requests
 from tmdb_helpers import get_user_api_key
 from tmdb_helpers import make_tmdb_api_request
 
@@ -9,8 +8,8 @@ def load_films(user_api_key, films_amount=1000):
     for film_id in range(films_amount):
         try:
             all_films.append(make_tmdb_api_request(method='/movie/%d' % film_id, api_key=user_api_key))
-        except urllib.error.HTTPError as err:
-            if err.code == 404:  #if no film on this id
+        except requests.HTTPError as err:
+            if err.response.status_code == 404:  #if no film on this id
                 continue
             else:
                 raise
